@@ -1,0 +1,32 @@
+body { background-color: #f8f9fa; }
+.container-main {
+    background-image: linear-gradient(to bottom right, #e0f2fe, #ffffff);
+    transition: all 0.3s ease-in-out;
+}
+.table-container-scrollable { max-height: 60vh; overflow-y: auto; }
+.btn-dark-blue {
+    background-color: #0d64d5; border-color: #0c5abf; color: #fff;
+}
+.btn-dark-blue:hover {
+    background-color: #0b53b0; border-color: #0a4aa5; color: #fff;
+}
+.bg-gray-readonly { background-color: #dee2e6 !important; }
+.btn-menu { width: 220px; }
+.modal { z-index: 1055; }
+.modal-backdrop { z-index: 1050; }
+
+.badge-status {
+    color: #fff;
+    font-size: 0.8rem;
+    padding: .35rem .6rem;
+    border-radius: 6px;
+    display: inline-block;
+    min-width: 80px;
+    text-align: center;
+}
+
+.separator-line {
+    margin: 1rem 0;
+    border: 0;
+    border-top: 1px solid #dee2e6;
+}

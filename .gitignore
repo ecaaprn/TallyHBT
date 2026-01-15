@@ -22,6 +22,7 @@ app/Http/Controllers/*_15102025.php
 app/Http/Controllers/*_22102025.php
 
 # sql dump
+db_wflo.sql
 *.sql
 
 # server specific

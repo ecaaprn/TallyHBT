@@ -15,10 +15,12 @@ class TimeList extends Model
         'truck_no',
         'NoPalka',
         'NoHose',
+        'Catatan',
         'plugging',
         'open_valve',
         'close_valve',
         'unplugging',
+        'kategori',
     ];
 
     public function jobOrder()

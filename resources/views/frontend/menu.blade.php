@@ -2,98 +2,222 @@
 
 @section('title', 'Menu Utama')
 
+@push('styles')
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.min.css">
+<style>
+    :root {
+        --dark-blue: #154D71;
+        --medium-blue: #1C6EA4;
+        --light-blue: #33A1E0;
+    }
+
+    #page-menu {
+        padding: 0 1rem;
+    }
+
+    #page-menu h2,
+    #page-menu .welcome-text {
+        color: #fff;
+    }
+
+    #page-menu .welcome-text {
+        font-weight: 600;
+    }
+
+    .btn-menu {
+        font-size: 1rem;
+        padding: .7rem 1.6rem;
+        font-weight: 500;
+        border-radius: .6rem;
+        background: var(--dark-blue);
+        transition: .2s;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 52px;
+        gap: 10px;
+        white-space: nowrap;
+        color: #fff;
+        border: none;
+    }
+
+    .btn-menu i,
+    .btn-menu span {
+        color: #fff;
+    }
+
+    .btn-menu:hover {
+        background: #245270;
+        transform: translateY(-2px);
+        color: #fff;
+    }
+
+    .btn-logout {
+        width: 26px;
+        height: 26px;
+        padding: 0;
+        border-radius: 6px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: .75rem;
+    }
+
+    #selection-popup .modal-content {
+        background: var(--light-blue);
+    }
+
+    #selection-popup .modal-title,
+    #selection-popup .form-label {
+        color: #fff;
+        font-weight: bold;
+    }
+
+    #selection-popup .modal-header,
+    #selection-popup .modal-footer {
+        border: 0;
+    }
+
+    #continue-btn {
+        background: var(--dark-blue);
+        color: #fff;
+    }
+
+    #continue-btn:hover {
+        background: #0d3a58;
+    }
+</style>
+@endpush
+
 @section('content')
-<div class="container">
-<div id="page-menu" class="d-flex flex-column align-items-center gap-3">
-    <div class="w-100 d-flex justify-content-center position-relative">
-        <h2 class="h2 fw-bold text-dark mb-0">Menu</h2>
-        <a href="#" class="btn btn-danger btn-sm shadow-sm position-absolute top-0 end-0 me-1" title="Logout" data-bs-toggle="modal" data-bs-target="#logoutModal">
+
+@php
+    $user = Auth::user();
+    $aksesMenu = [];
+    if ($user) {
+        $data = \App\Models\AksesMenu::where('user_id', $user->id)->first();
+        if ($data && $data->akses_menu) {
+            $aksesMenu = is_string($data->akses_menu)
+                ? json_decode($data->akses_menu, true)
+                : $data->akses_menu;
+            if (!is_array($aksesMenu)) $aksesMenu = [];
+        }
+    }
+@endphp
+
+<div id="page-menu" class="d-flex flex-column align-items-center w-100">
+    <div class="w-100 d-flex justify-content-center position-relative mb-2">
+        <h2 class="fw-bold mb-0 text-uppercase">Menu Utama</h2>
+        <a class="btn btn-danger shadow-sm position-absolute top-0 end-0 btn-logout"
+           data-bs-toggle="modal" data-bs-target="#logoutModal" title="Keluar">
             <i class="fa-solid fa-right-from-bracket"></i>
         </a>
     </div>
 
-    @auth
-        <div class="d-flex justify-content-center align-items-baseline gap-2">
-            <p class="fs-5 mb-0">Selamat Datang,</p>
-            <p class="h4 fw-bold mb-0">{{ Auth::user()->nama }}</p>
-        </div>
-    @endauth
+    <div class="d-flex justify-content-center align-items-center gap-2 mb-4">
+        <p class="fs-6 mb-0 welcome-text">Selamat Datang,</p>
+        <p class="h5 fw-bold mb-0 welcome-text">{{ Auth::user()->nama }}</p>
+    </div>
 
-    <div class="d-flex flex-column gap-3 w-100">
-        <a href="{{ route('monitoring') }}" class="btn btn-dark py-3 fs-5">Monitoring</a>
-        <button id="btn-to-input" class="btn btn-primary py-3 fs-5 text-nowrap">Tambah Data</button>
+    <div class="container" style="max-width:900px;">
+        <div class="row g-3 justify-content-center text-center">
+            @if(in_array('Monitoring', $aksesMenu))
+                <div class="col-auto">
+                    <a href="{{ route('monitoring') }}" class="btn btn-menu shadow">
+                        <i class="fa-solid fa-desktop"></i>
+                        <span>View Data</span>
+                    </a>
+                </div>
+            @endif
+
+            @if(in_array('Input Data', $aksesMenu))
+                <div class="col-auto">
+                    <button id="btn-to-input" class="btn btn-menu shadow">
+                        <i class="fa-solid fa-keyboard"></i>
+                        <span>Input Data</span>
+                    </button>
+                </div>
+            @endif
+
+            @if(in_array('Master Data', $aksesMenu))
+                <div class="col-auto">
+                    <a href="{{ route('dashboard') }}" class="btn btn-menu shadow">
+                        <i class="fa-solid fa-database"></i>
+                        <span>Dashboard</span>
+                    </a>
+                </div>
+            @endif
+        </div>
     </div>
 </div>
 
-<div class="modal fade" id="selection-popup" tabindex="-1">
+<div class="modal fade" id="selection-popup" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title">Pilih Tanggal & Shift</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
                 <div class="mb-3">
-                    <label for="input-tanggal" class="form-label fw-bold">Tanggal</label>
-                    <input type="date" class="form-control" id="input-tanggal">
+                    <label class="form-label">Tanggal</label>
+                    <input type="text" class="form-control" id="input-tanggal" placeholder="Masukkan Tanggal" autocomplete="off">
                 </div>
-                <label class="form-label fw-bold">Shift</label>
-                <div class="d-grid gap-2">
-                    <button class="shift-btn btn btn-outline-primary py-2" data-shift="1">Shift 1</button>
-                    <button class="shift-btn btn btn-outline-primary py-2" data-shift="2">Shift 2</button>
-                    <button class="shift-btn btn btn-outline-primary py-2" data-shift="3">Shift 3</button>
+                <div class="mb-2">
+                    <label class="form-label">Shift</label>
+                    <select class="form-select" id="shift-select">
+                        <option value="">Pilih Shift</option>
+                        <option value="1">Shift 1</option>
+                        <option value="2">Shift 2</option>
+                        <option value="3">Shift 3</option>
+                    </select>
                 </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+                <button class="btn" id="continue-btn">Lanjutkan</button>
             </div>
         </div>
     </div>
-</div>
-
-<div class="modal fade" id="logoutModal" tabindex="-1" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content rounded-4">
-            <div class="modal-header border-0 pb-0">
-                <h5 class="modal-title fw-bold">Konfirmasi Keluar</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-            </div>
-            <div class="modal-body text-center py-4">
-                Apakah Anda yakin ingin keluar dari akun?
-            </div>
-            <div class="modal-footer d-flex justify-content-center gap-3 border-0 pt-0">
-                <form id="logout-form" action="{{ route('logout') }}" method="POST">
-                    @csrf
-                    <button type="submit" class="btn btn-danger rounded-pill px-4">Ya, Keluar</button>
-                </form>
-                <button type="button" class="btn btn-secondary rounded-pill px-4" data-bs-dismiss="modal">Batal</button>
-            </div>
-        </div>
-    </div>
-</div>
 </div>
 @endsection
 
 @push('scripts')
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js"></script>
 <script>
-    document.addEventListener('DOMContentLoaded', function () {
-        const selectionModal = new bootstrap.Modal(document.getElementById('selection-popup'));
-        const dateInput = document.getElementById('input-tanggal');
-
-        document.getElementById('btn-to-input').addEventListener('click', () => {
-            dateInput.value = new Date().toISOString().slice(0, 10);
-            selectionModal.show();
+    document.addEventListener('DOMContentLoaded', function() {
+        $('#input-tanggal').datepicker({
+            format: 'yyyy-mm-dd',
+            autoclose: true,
+            todayHighlight: true
         });
 
-        document.querySelectorAll('.shift-btn').forEach(btn => {
-            btn.onclick = () => {
-                const shift = btn.dataset.shift;
-                const selectedDate = dateInput.value;
+        const selectionModal = new bootstrap.Modal(document.getElementById('selection-popup'));
+        const btnInput = document.getElementById('btn-to-input');
+        
+        if (btnInput) {
+            btnInput.addEventListener('click', () => selectionModal.show());
+        }
 
-                if (!selectedDate) {
-                    alert('Silakan pilih tanggal terlebih dahulu!');
-                    return;
-                }
+        document.getElementById('continue-btn').addEventListener('click', () => {
+            const date = document.getElementById('input-tanggal').value;
+            const shift = document.getElementById('shift-select').value;
 
-                window.location.href = `{{ url('/job-order') }}/${selectedDate}/${shift}`;
-            };
+            if (!date || !shift) {
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'Oops',
+                    text: 'Tanggal dan Shift harus dipilih!'
+                });
+                return;
+            }
+
+            const url = "{{ route('job-order.input', ['date' => 'DATE', 'shift' => 'SHIFT']) }}"
+                .replace('DATE', date)
+                .replace('SHIFT', shift);
+                
+            window.location.href = url;
         });
     });
 </script>

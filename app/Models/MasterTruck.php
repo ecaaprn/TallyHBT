@@ -7,5 +7,16 @@ use Illuminate\Database\Eloquent\Model;
 
 class MasterTruck extends Model
 {
-    protected $fillable = ['nama'];
+    use HasFactory;
+
+    protected $fillable = [
+        'nama',
+        'kapal_id',
+    ];
+
+    public function kapal()
+    {
+        return $this->belongsTo(MasterKapal::class, 'kapal_id');
+    }
 }
+

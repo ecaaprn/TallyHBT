@@ -15,6 +15,8 @@ return new class extends Migration
             $table->string('truck_no');
             $table->string('NoPalka')->nullable();
             $table->string('NoHose')->nullable();
+            $table->string('kategori')->nullable();
+            $table->text('Catatan')->nullable();
             $table->time('plugging')->nullable();
             $table->time('open_valve')->nullable();
             $table->time('close_valve')->nullable();

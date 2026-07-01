@@ -3,182 +3,359 @@
 @section('title', 'Input Data')
 
 @section('content')
-
 <style>
     :root {
+        --dark-blue: #0158a4;
+        --medium-blue: #1C6EA4;
+        --light-blue: #33A1E0;
+        --accent-yellow: #FFF9AF;
         --custom-gray-bg: #eeeeee;
     }
-    select:disabled, input:disabled, button:disabled {
+
+    #page-input {
+        max-width: 800px;
+        margin: 0 auto;
+        padding: 0 15px;
+    }
+
+    #page-input .h3 {
+        color: white;
+        text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.25);
+    }
+
+    #form-joborder,
+    .job-card,
+    .filter-row-container,
+    .form-control,
+    .form-select,
+    .btn-success,
+    .btn-secondary {
+        border: 1px solid #ced4da !important;
+    }
+
+    .btn-danger {
+        border: 1px solid #ced4da !important;
+    }
+
+    .btn-danger[data-bs-target="#logoutModal"] {
+        border: none !important;
+    }
+
+    .form-label {
         color: #000 !important;
-        -webkit-text-fill-color: #000 !important;
+        font-weight: 700 !important;
+        margin-bottom: 0.3rem;
+    }
+
+    .form-control,
+    .form-select,
+    .select2-selection__rendered {
+        color: #000 !important;
+        font-weight: 400 !important;
+    }
+
+    .form-control:focus,
+    .form-select:focus,
+    .btn:focus {
+        outline: none !important;
+        box-shadow: none !important;
+    }
+
+    #page-input select:disabled,
+    #page-input input:disabled {
+        color: #000 !important;
         opacity: 1 !important;
         background-color: var(--custom-gray-bg) !important;
     }
-    button.btn-secondary:disabled {
-        border: 1px solid #dee2e6 !important;
+
+    #page-input button:disabled {
+        color: #000 !important;
+        opacity: 1 !important;
+        background-color: #d1d5db !important;
+        border: 1px solid #ced4da !important;
     }
-    .filled-bg {
-        background-color: var(--custom-gray-bg) !important;
-    }
-    #page-input .bg-light {
-        background-color: var(--custom-gray-bg) !important;
-    }
-    #page-input .select2-container--default .select2-selection--single {
-        border-color: #dee2e6 !important;
-    }
-    #page-input select.filled-bg + .select2-container--default .select2-selection--single,
-    #page-input select:disabled + .select2-container--default .select2-selection--single {
-        background-color: var(--custom-gray-bg) !important;
-    }
-    .time-picker-btn {
-        border: none;
-        background-color: transparent;
-        cursor: pointer;
-        line-height: 1;
-        padding: 4px !important;
-    }
-    .time-picker-btn:hover {
-        color: var(--bs-primary);
-    }
-    input[readonly] {
-        background-color: var(--custom-gray-bg) !important;
-    }
-    #WaktuTiba:not(.filled-bg) {
+
+    .filter-row-container {
         background-color: #fff !important;
+        padding: 8px 15px;
+        border-radius: 8px;
     }
-    .select2-container--default .select2-selection--single {
-        height: calc(1.5em + 0.5rem + 2px) !important;
-        padding: 0.25rem 0.5rem !important;
+
+    .status-badge-sync {
+        padding: 0.25rem 0.75rem;
+        font-size: 0.875rem;
+        font-weight: 700;
+        border-radius: 4px;
+        display: inline-block;
+        border: 1px solid #ced4da;
+        line-height: 1.5;
+        text-align: center;
+        min-width: 80px;
+    }
+
+    .status-badge-sync.bg-primary {
+        background-color: var(--dark-blue) !important;
+    }
+
+    #toggle-filter-label {
+        font-weight: 800;
+        min-width: 70px;
+    }
+
+    #toggle-filter-label.status-aktif {
+        color: var(--dark-blue);
+    }
+
+    #toggle-filter-label.status-nonaktif {
+        color: #b91c1c;
+    }
+
+    .form-switch .form-check-input {
+        width: 2.2em;
+        height: 1.1em;
+        cursor: pointer;
+        border: 1px solid #000 !important;
+        background-color: #cbd5e1;
+    }
+
+    .form-switch .form-check-input:checked {
+        background-color: var(--dark-blue);
+        border-color: var(--dark-blue) !important;
+    }
+
+    .btn-primary {
+        background-color: var(--dark-blue) !important;
+        border: 1px solid #000 !important;
+    }
+
+    .job-card .btn-primary {
+        border: 1px solid #000 !important;
+    }
+
+    #page-input .select2-container--default .select2-selection--single {
+        height: 38px !important;
+        padding: 0.4rem 0.75rem;
         display: flex;
         align-items: center;
+        border: 1px solid #ced4da !important;
+        border-radius: 4px;
     }
+
+    .select2-container--default .select2-selection--single .select2-selection__rendered {
+        color: #000 !important;
+        line-height: 38px !important;
+        padding-left: 0 !important;
+    }
+
     .select2-container--default .select2-selection--single .select2-selection__arrow {
-        height: calc(1.5em + 0.5rem) !important;
+        height: 36px !important;
+    }
+
+    .select2-dropdown {
+        border: 1px solid #ced4da !important;
+    }
+
+    .select2-results__option--highlighted[aria-selected] {
+        background-color: var(--dark-blue) !important;
+    }
+
+    .select2-container--default .select2-search--dropdown {
+        padding: 8px !important;
+        border-bottom: 1px solid #ced4da !important;
+        background-color: #fff !important;
+        display: block !important;
+        visibility: visible !important;
+    }
+
+    .select2-container--default .select2-search--dropdown .select2-search__field {
+        border: 1px solid #ced4da !important;
+        border-radius: 4px !important;
+        padding: 6px 10px !important;
+        width: 100% !important;
+        font-size: 0.875rem !important;
+        outline: none !important;
+        display: block !important;
+        visibility: visible !important;
+    }
+
+    .pagination .page-link {
+        color: white;
+        border: none;
+        padding: 0.4rem 0.6rem;
+        min-width: 32px;
+        text-align: center;
+        background: transparent;
+        font-weight: 500;
+        text-decoration: none;
+        cursor: pointer;
+    }
+
+    .pagination .page-item.aktif .page-link {
+        background-color: white;
+        color: #0158a4;
+        border-radius: 4px;
+    }
+
+    .custom-radio .form-check-input {
+        display: none;
+    }
+
+    .custom-radio .form-check-label {
+        position: relative;
+        padding-left: 28px;
+        cursor: pointer;
+        line-height: 20px;
+        display: inline-block;
+        color: #000;
+        font-weight: 700;
+    }
+
+    .custom-radio .form-check-label::before {
+        content: '';
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 18px;
+        height: 18px;
+        border: 1px solid #000;
+        border-radius: 50%;
+        background: #fff;
+    }
+
+    .custom-radio .form-check-label::after {
+        content: '';
+        position: absolute;
+        left: 4px;
+        top: 4px;
+        width: 10px;
+        height: 10px;
+        border-radius: 50%;
+        background: var(--dark-blue);
+        transform: scale(0);
+        transition: transform 0.2s;
+    }
+
+    .custom-radio .form-check-input:checked+.form-check-label::after {
+        transform: scale(1);
     }
 </style>
 
-<div class="container">
-    <div id="page-input" class="d-flex flex-column">
+<div id="page-input" class="d-flex flex-column py-3">
     <div class="d-flex justify-content-between align-items-center mb-4">
         <div class="d-flex align-items-center gap-3">
-            <a href="{{ route('monitoring') }}" class="btn btn-link text-secondary fs-5 p-0" title="Kembali">
+            <a href="{{ route('monitoring') }}" class="btn btn-link fs-5 p-0 text-white border-0 shadow-none">
                 <i class="fa-solid fa-arrow-left"></i>
             </a>
-            <h2 id="form-title-heading" class="h3 fw-bold text-dark mb-0">Masukan Data Baru</h2>
+            <h2 class="h3 fw-bold mb-0">Input Data</h2>
         </div>
         <div class="d-flex align-items-center gap-2">
-            <div id="input-realtime-clock" class="fs-6 fw-bold bg-white border rounded-3 px-3 py-2 shadow-sm"></div>
-            <a href="#" class="btn btn-danger btn-sm shadow-sm" title="Logout" data-bs-toggle="modal" data-bs-target="#logoutModal">
+            <div id="input-realtime-clock" class="fw-bold bg-white border rounded shadow-sm"
+                style="height: 31px; display: flex; align-items: center; padding: 0 10px; font-size: 0.875rem; border-color: #ced4da !important;">
+            </div>
+            <a href="#" class="btn btn-danger btn-sm shadow-sm border-0" title="Logout" data-bs-toggle="modal"
+                data-bs-target="#logoutModal"
+                style="border: none !important; height: 31px; display: flex; align-items: center;">
                 <i class="fa-solid fa-right-from-bracket"></i>
             </a>
         </div>
     </div>
 
-    <div id="notification-area"></div>
-
     <form id="form-joborder" class="p-4 border rounded-3 bg-white shadow-sm mb-4">
-        <div class="row g-3 align-items-end mb-3">
-            <div class="col-12 col-md-4">
-                <label class="form-label fw-bold small">Tanggal</label>
-                <input type="text" class="form-control form-control-sm w-100 fw-bold" value="{{ $currentDate->locale('id')->translatedFormat('d F Y') }}" disabled />
+        @csrf
+        <div class="row g-3">
+            <div class="col-12 col-md-6">
+                <label class="form-label">Tanggal</label>
+                <input type="text" class="form-control" value="{{ $currentDate->locale('id')->translatedFormat('d F Y') }}" disabled />
             </div>
-            <div class="col-12 col-md-4">
-                <label class="form-label fw-bold small">Shift</label>
-                <input type="text" class="form-control form-control-sm w-100 fw-bold" value="Shift {{ $currentShift }}" disabled />
-            </div>
-            <div class="col-12 col-md-4">
-                <label for="Kapal" class="form-label fw-bold small">Kapal</label>
-                <select id="Kapal" name="Kapal" class="form-select form-select-sm select2 w-100" required>
-                    <option value="">Pilih</option>
-                    <option value="Kapal-A" @if(isset($selectedKapal) && $selectedKapal == 'Kapal-A') selected @endif>Kapal-A</option>
-                    <option value="Kapal-B" @if(isset($selectedKapal) && $selectedKapal == 'Kapal-B') selected @endif>Kapal-B</option>
-                    <option value="Kapal-C" @if(isset($selectedKapal) && $selectedKapal == 'Kapal-C') selected @endif>Kapal-C</option>
+            <div class="col-12 col-md-6">
+                <label class="form-label">Shift</label>
+                <select id="NoShift" name="NoShift" class="form-select select2-basic" required disabled>
+                    <option value="1" @if($currentShift == 1) selected @endif>Shift 1</option>
+                    <option value="2" @if($currentShift == 2) selected @endif>Shift 2</option>
+                    <option value="3" @if($currentShift == 3) selected @endif>Shift 3</option>
                 </select>
             </div>
-        </div>
-
-        <div class="row g-3 align-items-end">
-            <div class="col-12 col-md-4">
-                <label for="NoJobOrder" class="form-label fw-bold small">No Job Order</label>
-                <div class="input-group input-group-sm">
-                    <input type="text" id="NoJobOrder" name="NoJobOrder" placeholder="Scan atau ketik..." class="form-control form-control-sm" required />
-                    <button type="button" id="btn-scan-qr-input" class="btn btn-sm btn-primary" title="Scan QR Code">
+            <div class="col-12 col-md-6">
+                <label for="Kapal" class="form-label">Kapal</label>
+                <select id="Kapal" name="Kapal" class="form-select select2-basic w-100" required>
+                    <option value=""></option>
+                    @foreach($masterKapal as $kapalOption)
+                    <option value="{{ $kapalOption->nama }}" @if(isset($selectedKapal) && $selectedKapal == $kapalOption->nama) selected @endif>{{ $kapalOption->display }}</option>
+                    @endforeach
+                </select>
+            </div>
+            <div class="col-12 col-md-6">
+                <label for="WaktuTiba" class="form-label">Waktu Tiba</label>
+                <div class="input-group">
+                    <input type="text" id="WaktuTiba" name="WaktuTiba" class="form-control text-center" placeholder="--:--" readonly required style="border: 1px solid #ced4da !important;">
+                    <button type="button" id="btn-set-arrival-time" class="btn btn-success px-4" style="border: 1px solid #ced4da !important;">Start</button>
+                </div>
+            </div>
+            <div class="col-12 col-md-6">
+                <label for="NoJobOrder" class="form-label">No Job Order</label>
+                <div class="input-group">
+                    <input type="text" id="NoJobOrder" name="NoJobOrder" placeholder="Scan atau ketik..." class="form-control" required style="border: 1px solid #ced4da !important;" />
+                    <button type="button" id="btn-scan-qr-input" class="btn btn-primary shadow-none" style="border: 1px solid #ced4da !important;">
                         <i class="fa-solid fa-qrcode"></i>
                     </button>
                 </div>
             </div>
-            <div class="col-12 col-md-4">
-                <label for="NoTruck" class="form-label fw-bold small">No Truck</label>
-                <select id="NoTruck" name="NoTruck" class="form-select form-select-sm select2 w-100" required>
-                    <option value="">Pilih</option>
-                    <option value="Truck-1">Truck-1</option>
-                    <option value="Truck-2">Truck-2</option>
-                    <option value="Truck-3">Truck-3</option>
+            <div class="col-12 col-md-6">
+                <label for="NoTruck" class="form-label">No Truck</label>
+                <select id="NoTruck" name="NoTruck" class="form-select select2-basic w-100" required>
+                    <option value=""></option>
+                    @foreach($masterTruck as $truckOption)
+                    <option value="{{ $truckOption->nama }}">{{ $truckOption->nama }}</option>
+                    @endforeach
                 </select>
             </div>
-            <div class="col-12 col-md-4">
-                <label for="WaktuTiba" class="form-label fw-bold small">Waktu Tiba</label>
-                <div class="input-group input-group-sm">
-                    <input type="text" id="WaktuTiba" name="WaktuTiba" class="form-control form-control-sm text-center" placeholder="--:--" readonly required>
-                    <button type="button" id="btn-set-arrival-time" class="btn btn-sm btn-success">Start</button>
-                </div>
-            </div>
         </div>
-
-        <div class="row mt-3">
-             <div class="col-12">
-                <div class="d-grid mt-2">
-                    <button type="submit" id="btn-submit-joborder" class="btn btn-primary py-2 shadow-sm">
-                        <i class="fa-solid fa-plus me-2"></i>Tambah
-                    </button>
-                </div>
-            </div>
+        <div class="d-grid mt-4">
+            <button type="submit" id="btn-submit-joborder" class="btn btn-primary py-2 shadow-sm" style="border: 1px solid #ced4da !important;">
+                <i class="fa-solid fa-plus me-2"></i>Tambah Job Order
+            </button>
         </div>
     </form>
 
-    <div class="row g-3 align-items-center mb-3">
-        <div class="col-12 col-md-auto">
-            <div class="form-check form-switch fs-5 d-flex align-items-center">
-                <input class="form-check-input" type="checkbox" role="switch" id="toggle-filter" checked>
-                <label id="toggle-filter-label" class="fw-bold ms-2" for="toggle-filter">Aktif</label>
+    <div class="filter-row-container mb-3 shadow-sm" style="border: 1px solid #ced4da !important;">
+        <div class="d-flex align-items-center gap-3 flex-nowrap">
+            <div class="d-flex align-items-center">
+                <div class="form-check form-switch d-flex align-items-center mb-0">
+                    <input class="form-check-input" type="checkbox" role="switch" id="toggle-filter" checked>
+                    <label id="toggle-filter-label" class="ms-2 status-aktif" for="toggle-filter">Aktif</label>
+                </div>
             </div>
-        </div>
-        <div class="col-12 col-md-3">
-            <div class="input-group">
-                <input type="search" id="search-input" class="form-control" placeholder="Cari No Job Order atau No Truck...">
+            <div class="flex-grow-1">
+                <input type="search" id="search-input" class="form-control" placeholder="Cari No Job Order atau No Truck"
+                    style="background-color: #f1f5f9 !important; border: 2px solid #64748b !important; font-weight: 700 !important;">
+            </div>
+            <div style="width: 150px;">
+                <select id="shift-filter" class="form-select" style="background-color: #f1f5f9 !important; border: 2px solid #64748b !important; font-weight: 700 !important;">
+                    <option value="">Semua Shift</option>
+                    <option value="1">Shift 1</option>
+                    <option value="2">Shift 2</option>
+                    <option value="3">Shift 3</option>
+                </select>
             </div>
         </div>
     </div>
 
     <div id="joborder-list" class="row g-3"></div>
-</div>
+    <div id="pagination-container" class="d-flex justify-content-center mt-4"></div>
 
-<div class="modal fade" id="qr-scanner-popup" tabindex="-1">
-    <div class="modal-dialog modal-dialog-centered"><div class="modal-content">
-        <div class="modal-header">
-            <h5 class="modal-title">Scan QR Code</h5>
-            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+    <div class="modal fade" id="qr-scanner-popup" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content" style="border: 1px solid #ced4da !important;">
+                <div class="modal-header bg-primary text-white" style="border-bottom: 1px solid #ced4da !important;">
+                    <h5 class="modal-title fw-bold">Scan QR Code</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body p-0">
+                    <div id="qr-reader" class="w-100"></div>
+                </div>
+            </div>
         </div>
-        <div class="modal-body"><div id="qr-reader" style="width:100%;"></div></div>
-    </div></div>
-</div>
-
-<div class="modal fade" id="logoutModal" tabindex="-1" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered"><div class="modal-content rounded-4">
-        <div class="modal-header border-0 pb-0">
-            <h5 class="modal-title fw-bold">Konfirmasi Keluar</h5>
-            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-        </div>
-        <div class="modal-body text-center py-4">Apakah Anda yakin ingin keluar dari akun?</div>
-        <div class="modal-footer d-flex justify-content-center gap-3 border-0 pt-0">
-            <form id="logout-form" action="{{ route('logout') }}" method="POST">
-                @csrf
-                <button type="submit" class="btn btn-danger rounded-pill px-4">Ya, Keluar</button>
-            </form>
-            <button type="button" class="btn btn-secondary rounded-pill px-4" data-bs-dismiss="modal">Batal</button>
-        </div>
-    </div></div>
-</div>
+    </div>
 </div>
 @endsection
 
@@ -186,410 +363,495 @@
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>
 <script>
-document.addEventListener('DOMContentLoaded', function() {
-    let jobOrderList = @json($jobOrders);
-    const selectedKapal = @json($selectedKapal ?? null);
-    const CSRF_TOKEN = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
-    const el = id => document.getElementById(id);
-    let qrScannerModal = new bootstrap.Modal(el('qr-scanner-popup'));
-    let currentlyEditingId = null;
-    let html5QrCode = null;
-
-    const showNotification = (message, type = 'error') => {
-        const iconMap = { 'success': 'success', 'danger': 'error', 'warning': 'warning', 'info': 'info' };
-        Swal.fire({
-            position: 'center',
-            icon: iconMap[type] || 'error',
-            title: message,
-            showConfirmButton: false,
-            timer: 2000
-        });
-    };
-
-    const isComplete = item => item.time_list && item.time_list.plugging && item.time_list.open_valve && item.time_list.unplugging && item.time_list.close_valve;
-    const formatTimeHM = timeStr => (typeof timeStr === 'string' && timeStr) ? timeStr.substring(0, 5) : null;
-
-    function createTimePickerHTML(waktuKey, item) {
-        const timeValue = (waktuKey === 'WaktuTiba') ? item.WaktuTiba : (item.time_list ? item.time_list[waktuKey] : null);
-        let [h, m] = timeValue ? formatTimeHM(timeValue).split(':') : ['--', '--'];
-        return `
-        <div class="time-picker d-flex align-items-center justify-content-center gap-1 p-1 border rounded w-100" data-field="${waktuKey}">
-            <div class="d-flex flex-column align-items-center">
-                <button type="button" class="time-picker-btn px-1" onclick="adjustTime(event, 'h', 1, this)"><i class="fas fa-chevron-up" style="font-size:0.8rem;"></i></button>
-                <span class="fw-bold hour-display" style="width: 25px; text-align: center; font-size:1.2rem;">${h}</span>
-                <button type="button" class="time-picker-btn px-1" onclick="adjustTime(event, 'h', -1, this)"><i class="fas fa-chevron-down" style="font-size:0.8rem;"></i></button>
-            </div>
-            <span class="fw-bold fs-5">:</span>
-            <div class="d-flex flex-column align-items-center">
-                <button type="button" class="time-picker-btn px-1" onclick="adjustTime(event, 'm', 1, this)"><i class="fas fa-chevron-up" style="font-size:0.8rem;"></i></button>
-                <span class="fw-bold minute-display" style="width: 25px; text-align: center; font-size:1.2rem;">${m}</span>
-                <button type="button" class="time-picker-btn px-1" onclick="adjustTime(event, 'm', -1, this)"><i class="fas fa-chevron-down" style="font-size:0.8rem;"></i></button>
-            </div>
-        </div>`;
-    }
-
-    window.adjustTime = (event, unit, amount, element) => {
-        event.preventDefault();
-        const timePicker = element.closest('.time-picker');
-        const hourSpan = timePicker.querySelector('.hour-display');
-        const minuteSpan = timePicker.querySelector('.minute-display');
-        let hours = isNaN(parseInt(hourSpan.textContent)) ? new Date().getHours() : parseInt(hourSpan.textContent);
-        let minutes = isNaN(parseInt(minuteSpan.textContent)) ? new Date().getMinutes() : parseInt(minuteSpan.textContent);
-        if (unit === 'h') hours = (hours + amount + 24) % 24;
-        if (unit === 'm') minutes = (minutes + amount + 60) % 60;
-        hourSpan.textContent = String(hours).padStart(2, '0');
-        minuteSpan.textContent = String(minutes).padStart(2, '0');
-    };
-
-    function createDisplayCardHTML(item) {
-        const complete = isComplete(item);
-        const isEditingThisCard = (currentlyEditingId === item.id);
-        const tl = item.time_list || {};
-
-        const createActionRow = (label, field) => {
-            const timeVal = formatTimeHM(tl[field]);
-            const hasTime = !!timeVal;
-            const sequence = { open_valve: 'plugging', close_valve: 'open_valve', unplugging: 'close_valve' };
-            let isBtnDisabled = complete || hasTime;
-
-            if (!isBtnDisabled && !isEditingThisCard) {
-                if (field === 'plugging') {
-                    isBtnDisabled = !item.WaktuTiba;
-                } else {
-                    isBtnDisabled = !tl[sequence[field]];
-                }
-            }
-
-            const btnClass = isBtnDisabled ? 'btn-secondary' : 'btn-success';
-            const btnText = hasTime ? 'Selesai' : 'Mulai';
-            const actionFunc = `setTime(this, ${item.id}, '${field}')`;
-            const bgClass = hasTime || (complete && !isEditingThisCard) ? 'filled-bg' : '';
-            return `<div class="form-group">
-                        <label class="form-label fw-bold small">${label}</label>
-                        <div class="input-group input-group-sm">
-                            <input type="text" class="form-control form-control-sm text-center ${bgClass}" value="${timeVal || '--:--'}" readonly>
-                            <button onclick="${actionFunc}" class="btn ${btnClass} btn-sm" ${isBtnDisabled ? 'disabled' : ''}>${btnText}</button>
-                        </div>
-                    </div>`;
+    document.addEventListener('DOMContentLoaded', function () {
+        let jobOrderList = @json($jobOrders);
+        const masterData = {
+            trucks: @json($masterTruck ?? []),
+            hoses: @json($masterHose ?? []),
+            palkas: @json($masterPalka ?? [])
+        };
+        const config = {
+            selectedKapal: @json($selectedKapal ?? null),
+            csrfToken: document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
+            currentShift: '{{ $currentShift }}',
+            currentDate: '{{ $currentDate->toDateString() }}',
+            storeUrl: "{{ route('joborders.store') }}"
         };
 
-        const timeFieldsForEdit = { plugging:'Plugging', open_valve: 'Open Valve', close_valve: 'Close Valve', unplugging: 'Unplugging' };
-        const timeFieldsHTML = isEditingThisCard ?
-            Object.entries(timeFieldsForEdit).map(([field, label]) => `<div class="col-6"><label class="form-label fw-bold small">${label}</label>${createTimePickerHTML(field, item)}</div>`).join('') :
-            Object.entries(timeFieldsForEdit).map(([field, label]) => `<div class="col-6">${createActionRow(label, field)}</div>`).join('');
+        let currentlyEditingId = null;
+        let html5QrCode = null;
+        let currentPage = 1;
+        const itemsPerPage = 8;
+        let tempTimeChanges = {};
 
-        return `<div class="card-body p-3 d-flex flex-column">
-                    <div class="row g-2 align-items-start mb-2">
-                        <div class="col-6"><label class="form-label fw-bold small">No Job Order</label><input type="text" class="form-control form-control-sm" value="${item.NoJobOrder}" disabled></div>
-                        <div class="col-6 text-end">
-                            <span class="badge ${complete ? 'bg-secondary' : 'bg-success'} mb-1 w-50">${complete ? 'NonAktif' : 'Aktif' }</span>
-                             <div class="d-flex gap-1 justify-content-end">
-                                 ${isEditingThisCard ? `<button onclick="saveCardChanges(${item.id})" class="btn btn-sm btn-success">Simpan</button><button onclick="cancelCardEdit()" class="btn btn-sm btn-secondary">Batal</button>` : `<button onclick="editJobOrder(${item.id})" class="btn btn-sm btn-primary w-50">Edit</button>`}
-                             </div>
+        const el = id => document.getElementById(id);
+        const DOM = {
+            jobOrderContainer: el('joborder-list'),
+            form: el('form-joborder'),
+            waktuTibaInput: el('WaktuTiba'),
+            noJobOrderInput: el('NoJobOrder'),
+            noTruckSelect: el('NoTruck'),
+            kapalSelect: el('Kapal'),
+            statusToggle: el('toggle-filter'),
+            statusToggleLabel: el('toggle-filter-label'),
+            searchInput: el('search-input'),
+            shiftFilter: el('shift-filter'),
+            arrivalTimeBtn: el('btn-set-arrival-time'),
+            submitBtn: el('btn-submit-joborder'),
+            qrScannerModalEl: el('qr-scanner-popup'),
+            realtimeClock: el('input-realtime-clock'),
+            scanQrBtn: el('btn-scan-qr-input'),
+        };
+        const qrScannerModal = new bootstrap.Modal(DOM.qrScannerModalEl);
+
+        const isComplete = i => i.time_list && i.time_list.plugging && i.time_list.open_valve && i.time_list.unplugging && i.time_list.close_valve;
+
+        const normalizeStatus = s => {
+            if (!s && s !== '') return 'Aktif';
+            const v = String(s).toLowerCase().trim();
+            if (v === 'aktif' || v === '1' || v === 'true') return 'Aktif';
+            if (v === 'nonaktif' || v === 'non-aktif' || v === '0' || v === 'false') return 'NonAktif';
+            if (v === 'batal') return 'Batal';
+            return s;
+        };
+
+        const normalizeJobOrder = o => {
+            if (!o) return o;
+            const copy = { ...o };
+            copy.status = normalizeStatus(copy.status);
+            if (copy.time_list && typeof copy.time_list === 'object') {
+                copy.time_list.kategori = copy.time_list.kategori || 'Non Booster';
+                copy.time_list.Catatan = copy.time_list.Catatan || '';
+            }
+            return copy;
+        };
+
+        const formatTimeHM = t => (typeof t === 'string' && t) ? t.substring(0, 5) : null;
+        const getCurrentTime = () => {
+            const n = new Date();
+            return `${String(n.getHours()).padStart(2, '0')}:${String(n.getMinutes()).padStart(2, '0')}`;
+        };
+
+        const naturalSort = (a, b) => {
+            const getNumber = (str) => {
+                const match = str.match(/(\d+)/);
+                return match ? parseInt(match[1], 10) : 0;
+            };
+            const numA = getNumber(a.nama || a);
+            const numB = getNumber(b.nama || b);
+            if (numA !== numB) return numA - numB;
+            return (a.nama || a).localeCompare(b.nama || b);
+        };
+
+        const compareTime = (time1, time2) => {
+            if (!time1 || !time2) return 0;
+            const [h1, m1] = time1.split(':').map(Number);
+            const [h2, m2] = time2.split(':').map(Number);
+            if (h1 !== h2) return h1 - h2;
+            return m1 - m2;
+        };
+
+        const addOneMinute = (timeStr) => {
+            if (!timeStr || timeStr === '--:--') return null;
+            const [hours, minutes] = timeStr.split(':').map(Number);
+            let newMinutes = minutes + 1;
+            let newHours = hours;
+            if (newMinutes >= 60) {
+                newMinutes = 0;
+                newHours = (newHours + 1) % 24;
+            }
+            return `${String(newHours).padStart(2, '0')}:${String(newMinutes).padStart(2, '0')}`;
+        };
+
+        const showNotification = (msg, type = 'success') => {
+            Swal.fire({ position: 'center', icon: type, title: msg, showConfirmButton: false, timer: 1500 });
+        };
+
+        const populateAvailableTrucks = () => {
+            const activeTrucks = jobOrderList
+                .filter(item => normalizeStatus(item.status) === 'Aktif' && !isComplete(item))
+                .map(item => item.NoTruck);
+            const available = masterData.trucks.filter(t => !activeTrucks.includes(t.nama));
+            const $s = $(DOM.noTruckSelect);
+            const val = $s.val();
+            $s.empty().append('<option value=""></option>');
+            available.forEach(t => $s.append(new Option(t.nama, t.nama)));
+            $s.val(val).trigger('change.select2');
+        };
+
+        async function updateJobOrder(jobOrderId, updatedData) {
+            try {
+                const response = await fetch(`/job-orders/${jobOrderId}`, {
+                    method: 'PUT',
+                    headers: { 'Content-Type': 'application/json', 'X-CSRF-TOKEN': config.csrfToken, 'Accept': 'application/json' },
+                    body: JSON.stringify(updatedData)
+                });
+                if (!response.ok) throw new Error('Update gagal');
+                const res = await response.json();
+                const idx = jobOrderList.findIndex(jo => jo.id === jobOrderId);
+                jobOrderList[idx] = normalizeJobOrder(res.jobOrder || res);
+                render();
+                return true;
+            } catch (error) {
+                showNotification('Gagal memperbarui data', 'error');
+                return false;
+            }
+        }
+
+        function createDisplayCardHTML(item) {
+            const complete = isComplete(item), cancelled = normalizeStatus(item.status) === 'Batal', tl = item.time_list || {};
+            const isEdit = (currentlyEditingId === item.id);
+
+            let badge = cancelled ?
+                '<div class="status-badge-sync bg-danger text-white border">NONAKTIF</div>' :
+                (complete ? '<div class="status-badge-sync bg-secondary text-white border">NONAKTIF</div>' : '<div class="status-badge-sync bg-primary text-white border" style="background-color: #0158a4 !important;">AKTIF</div>');
+
+            let actions = isEdit ?
+                `<button onclick="saveCardChanges(${item.id})" class="btn btn-sm btn-success fw-bold" style="border: 1px solid #ced4da !important;">Simpan</button>
+                 <button onclick="cancelCardEdit()" class="btn btn-sm btn-secondary ms-1 fw-bold" style="border: 1px solid #ced4da !important;">Batal</button>` :
+                (!cancelled && !complete ?
+                    `<button onclick="openNotePopup(${item.id})" class="btn btn-sm btn-secondary" style="border: 1px solid #ced4da !important;">Catatan</button>
+                     <button onclick="editJobOrder(${item.id})" class="btn btn-sm btn-primary ms-1 border-0">Edit</button>
+                     <button onclick="cancelJobOrder(${item.id})" class="btn btn-sm btn-danger ms-1" style="border: 1px solid #ced4da !important;">Batal</button>` :
+                    (complete ? `<button onclick="editJobOrder(${item.id})" class="btn btn-sm btn-primary border-0">Edit</button>` : ''));
+
+            const activeTrucksForEdit = jobOrderList
+                .filter(i => i.id !== item.id && normalizeStatus(i.status) === 'Aktif' && !isComplete(i))
+                .map(i => i.NoTruck);
+            const truckOpts = masterData.trucks.filter(t => !activeTrucksForEdit.includes(t.nama)).map(t => `<option value="${t.nama}" ${item.NoTruck === t.nama ? 'selected' : ''}>${t.nama}</option>`).join('');
+
+            const rowTime = (label, field) => {
+                const val = formatTimeHM(tl[field]), seq = { open_valve: 'plugging', close_valve: 'open_valve', unplugging: 'close_valve' };
+                const prevField = seq[field];
+                const prevTime = field === 'plugging' ? item.WaktuTiba : (prevField ? tl[prevField] : null);
+                let dis = (normalizeStatus(item.status) !== 'Aktif' || complete) || !!val || (field !== 'plugging' && !prevTime);
+
+                if (isEdit) {
+                    const tempTimeKey = `${field}-${item.id}`;
+                    let timeValue = tempTimeChanges[tempTimeKey] || val;
+                    if (!timeValue || timeValue === '--:--' || timeValue.trim() === '') timeValue = '00:00';
+                    const [h, m] = timeValue.split(':');
+                    return `
+                        <div class="col-6 mb-2">
+                            <label class="form-label small text-secondary">${label}</label>
+                            <div class="time-picker d-flex align-items-center justify-content-center gap-1 p-1 border rounded w-100" style="border-color: #ced4da !important;" data-field="${field}-${item.id}">
+                                <div class="d-flex flex-column align-items-center">
+                                    <button type="button" class="px-1" onclick="adjustTime(event, 'h', 1, '${field}-${item.id}')" style="border: none !important; background-color: transparent !important; padding: 12px !important; min-width: 40px;"><i class="fas fa-chevron-up"></i></button>
+                                    <span class="fw-bold hour-display" style="font-size: 1.5rem !important;">${h || '00'}</span>
+                                    <button type="button" class="px-1" onclick="adjustTime(event, 'h', -1, '${field}-${item.id}')" style="border: none !important; background-color: transparent !important; padding: 12px !important; min-width: 40px;"><i class="fas fa-chevron-down"></i></button>
+                                </div>
+                                <span class="fw-bold fs-5">:</span>
+                                <div class="d-flex flex-column align-items-center">
+                                    <button type="button" class="px-1" onclick="adjustTime(event, 'm', 1, '${field}-${item.id}')" style="border: none !important; background-color: transparent !important; padding: 12px !important; min-width: 40px;"><i class="fas fa-chevron-up"></i></button>
+                                    <span class="fw-bold minute-display" style="font-size: 1.5rem !important;">${m || '00'}</span>
+                                    <button type="button" class="px-1" onclick="adjustTime(event, 'm', -1, '${field}-${item.id}')" style="border: none !important; background-color: transparent !important; padding: 12px !important; min-width: 40px;"><i class="fas fa-chevron-down"></i></button>
+                                </div>
+                            </div>
+                        </div>`;
+                }
+
+                const buttonText = val ? 'Done' : 'Start';
+                return `
+                    <div class="col-6 mb-2">
+                        <label class="form-label small text-secondary">${label}</label>
+                        <div class="input-group">
+                            <input type="text" class="form-control text-center ${dis ? 'filled-bg' : 'actionable-input'}" style="border-color: #ced4da !important;" value="${val || '--:--'}" readonly>
+                            <button onclick="setTime(this, ${item.id}, '${field}')" class="btn btn-primary fw-bold" ${dis ? 'disabled' : ''} style="background-color:${dis ? '#d1d5db' : '#0158a4'}; border: 1px solid #ced4da !important; color:${dis ? '#000' : 'white'}">${buttonText}</button>
+                        </div>
+                    </div>`;
+            };
+
+            return `
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <div>${badge}</div>
+                        <div class="d-flex gap-1 align-items-center">${cancelled ? '<div class="status-badge-sync bg-danger text-white border">BATAL</div>' : ''}${actions}</div>
+                    </div>
+                    <div class="row g-2 mb-2">
+                        <div class="col-12">
+                            <label class="form-label">No Job Order</label>
+                            <input type="text" class="form-control" style="border-color: #ced4da !important;" value="${item.NoJobOrder}" disabled>
                         </div>
                     </div>
                     <div class="row g-2 mb-2">
                         <div class="col-6">
-                            <label class="form-label fw-bold small">No Truck</label>
-                            ${isEditingThisCard ? `<select id="NoTruck-${item.id}" class="form-select form-select-sm select2"><option value="Truck-1" ${item.NoTruck === 'Truck-1' ? 'selected' : ''}>Truck-1</option><option value="Truck-2" ${item.NoTruck === 'Truck-2' ? 'selected' : ''}>Truck-2</option><option value="Truck-3" ${item.NoTruck === 'Truck-3' ? 'selected' : ''}>Truck-3</option></select>` : `<input type="text" class="form-control form-control-sm" value="${item.NoTruck}" disabled>`}
+                            <label class="form-label">Tanggal</label>
+                            <input type="text" class="form-control" style="border-color: #ced4da !important;" value="${item.Tanggal ? (() => {
+                                const d = new Date(item.Tanggal);
+                                const months = ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'];
+                                return d.getDate() + ' ' + months[d.getMonth()] + ' ' + d.getFullYear();
+                            })() : '-'}" disabled>
                         </div>
                         <div class="col-6">
-                            <div class="form-group">
-                                <label class="form-label fw-bold small">Waktu Tiba</label>
-                                ${isEditingThisCard
-                                    ? createTimePickerHTML('WaktuTiba', item)
-                                    : `<input type="text" class="form-control form-control-sm text-center filled-bg" value="${formatTimeHM(item.WaktuTiba) || '--:--'}" disabled>`
-                                }
-                            </div>
+                            <label class="form-label">Shift</label>
+                            <input type="text" class="form-control text-center fw-bold" value="Shift ${item.NoShift}" disabled>
                         </div>
-                        <div class="col-6"><label class="form-label fw-bold small">No Hose</label><select id="NoHose-${item.id}" class="form-select form-select-sm select2" onchange="updateJobOrderDetail(this, ${item.id}, 'NoHose')" ${isEditingThisCard ? '' : (tl.NoHose || complete ? 'disabled' : '')}><option value="">Pilih</option><option value="Hose-1" ${tl.NoHose === 'Hose-1' ? 'selected' : ''}>Hose-1</option><option value="Hose-2" ${tl.NoHose === 'Hose-2' ? 'selected' : ''}>Hose-2</option><option value="Hose-3" ${tl.NoHose === 'Hose-3' ? 'selected' : ''}>Hose-3</option></select></div>
-                        <div class="col-6"><label class="form-label fw-bold small">No Palka</label><select id="NoPalka-${item.id}" class="form-select form-select-sm select2 ${!isEditingThisCard && tl.NoPalka ? 'filled-bg' : ''}" onchange="updateJobOrderDetail(this, ${item.id}, 'NoPalka')" ${isEditingThisCard ? '' : (tl.NoPalka || complete ? 'disabled' : '')}><option value="">Pilih</option><option value="Palka-A" ${tl.NoPalka === 'Palka-A' ? 'selected' : ''}>Palka-A</option><option value="Palka-B" ${tl.NoPalka === 'Palka-B' ? 'selected' : ''}>Palka-B</option><option value="Palka-C" ${tl.NoPalka === 'Palka-C' ? 'selected' : ''}>Palka-C</option></select></div>
                     </div>
-                    <hr class="my-2">
-                    <div class="row g-2">${timeFieldsHTML}</div>
+                    ${tl.Catatan ? `<div class="mb-3"><label class="form-label">Catatan</label><div style="border: 1px solid #ced4da !important; background-color: #eeeeee !important; padding: 10px; border-radius: 6px; color: #000; font-weight: 400; font-size: 0.875rem;">${tl.Catatan}</div></div>` : ''}
+                    <div class="row g-2 mb-2">
+                        <div class="col-6"><label class="form-label">No Truck</label>${isEdit ? `<select id="NoTruck-${item.id}" class="form-select select2-basic">${truckOpts}</select>` : `<input type="text" class="form-control" style="border-color: #ced4da !important;" value="${item.NoTruck}" disabled>`}</div>
+                        <div class="col-6"><label class="form-label">Waktu Tiba</label>${isEdit ? (() => {
+                            const tempTimeKey = `WaktuTiba-${item.id}`;
+                            let waktuTiba = tempTimeChanges[tempTimeKey] || formatTimeHM(item.WaktuTiba);
+                            if (!waktuTiba || waktuTiba === '--:--' || waktuTiba.trim() === '') waktuTiba = '00:00';
+                            const [h, m] = waktuTiba.split(':');
+                            return `
+                                <div class="time-picker d-flex align-items-center justify-content-center gap-1 p-1 border rounded w-100" style="border-color: #ced4da !important;" data-field="WaktuTiba-${item.id}">
+                                    <div class="d-flex flex-column align-items-center">
+                                        <button type="button" class="px-1" onclick="adjustTime(event, 'h', 1, 'WaktuTiba-${item.id}')" style="border: none !important; background-color: transparent !important; padding: 12px !important; min-width: 40px;"><i class="fas fa-chevron-up"></i></button>
+                                        <span class="fw-bold hour-display" style="font-size: 1.5rem !important;">${h || '00'}</span>
+                                        <button type="button" class="px-1" onclick="adjustTime(event, 'h', -1, 'WaktuTiba-${item.id}')" style="border: none !important; background-color: transparent !important; padding: 12px !important; min-width: 40px;"><i class="fas fa-chevron-down"></i></button>
+                                    </div>
+                                    <span class="fw-bold fs-5">:</span>
+                                    <div class="d-flex flex-column align-items-center">
+                                        <button type="button" class="px-1" onclick="adjustTime(event, 'm', 1, 'WaktuTiba-${item.id}')" style="border: none !important; background-color: transparent !important; padding: 12px !important; min-width: 40px;"><i class="fas fa-chevron-up"></i></button>
+                                        <span class="fw-bold minute-display" style="font-size: 1.5rem !important;">${m || '00'}</span>
+                                        <button type="button" class="px-1" onclick="adjustTime(event, 'm', -1, 'WaktuTiba-${item.id}')" style="border: none !important; background-color: transparent !important; padding: 12px !important; min-width: 40px;"><i class="fas fa-chevron-down"></i></button>
+                                    </div>
+                                </div>`;
+                        })() : `<input type="text" class="form-control text-center" style="border-color: #ced4da !important;" value="${formatTimeHM(item.WaktuTiba) || '--:--'}" disabled>`}</div>
+                    </div>
+                    <div class="row g-2 mb-2">
+                        <div class="col-6"><label class="form-label">Hose</label>${isEdit ? `<select id="NoHose-${item.id}" class="form-select select2-basic"><option value=""></option>${[...masterData.hoses].sort(naturalSort).map(h => `<option value="${h.nama}" ${tl.NoHose === h.nama ? 'selected' : ''}>${h.nama}</option>`).join('')}</select>` : `<select id="NoHose-${item.id}" class="form-select select2-basic" onchange="updateJobOrderDetail(this, ${item.id}, 'NoHose')" ${complete || cancelled ? 'disabled' : ''}><option value=""></option>${[...masterData.hoses].sort(naturalSort).map(h => `<option value="${h.nama}" ${tl.NoHose === h.nama ? 'selected' : ''}>${h.nama}</option>`).join('')}</select>`}</div>
+                        <div class="col-6"><label class="form-label">Palka</label>${isEdit ? `<select id="NoPalka-${item.id}" class="form-select select2-basic"><option value=""></option>${[...masterData.palkas].sort(naturalSort).map(p => `<option value="${p.nama}" ${tl.NoPalka === p.nama ? 'selected' : ''}>${p.nama}</option>`).join('')}</select>` : `<select id="NoPalka-${item.id}" class="form-select select2-basic" onchange="updateJobOrderDetail(this, ${item.id}, 'NoPalka')" ${complete || cancelled ? 'disabled' : ''}><option value=""></option>${[...masterData.palkas].sort(naturalSort).map(p => `<option value="${p.nama}" ${tl.NoPalka === p.nama ? 'selected' : ''}>${p.nama}</option>`).join('')}</select>`}</div>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label d-block text-start" style="padding-left: 0;">Kategori</label>
+                        <div class="d-flex gap-3 justify-content-start">
+                            <div class="form-check custom-radio" style="padding-left: 0;"><input class="form-check-input" type="radio" name="k-${item.id}" id="b-${item.id}" value="Booster" ${tl.kategori === 'Booster' ? 'checked' : ''} onchange="${isEdit ? '' : `updateBoosterStatus(this,${item.id})`}" ${!isEdit && (complete || cancelled) ? 'disabled' : ''}><label class="form-check-label small" for="b-${item.id}" style="padding-left: 24px;">Booster</label></div>
+                            <div class="form-check custom-radio" style="padding-left: 0;"><input class="form-check-input" type="radio" name="k-${item.id}" id="nb-${item.id}" value="Non Booster" ${tl.kategori !== 'Booster' ? 'checked' : ''} onchange="${isEdit ? '' : `updateBoosterStatus(this,${item.id})`}" ${!isEdit && (complete || cancelled) ? 'disabled' : ''}><label class="form-check-label small" for="nb-${item.id}" style="padding-left: 24px;">Non Booster</label></div>
+                        </div>
+                    </div>
+                    <hr>
+                    <div class="row">${rowTime('Plugging', 'plugging')}${rowTime('Open Valve', 'open_valve')}${rowTime('Close Valve', 'close_valve')}${rowTime('Unplugging', 'unplugging')}</div>
                 </div>`;
-    }
-
-    function renderJobOrderList(listToRender) {
-        const container = el('joborder-list');
-        container.innerHTML = '';
-        const sortedList = listToRender.sort((a, b) => new Date(a.created_at) - new Date(b.created_at));
-        if (sortedList.length === 0) {
-            container.innerHTML = `<p class="col-12 text-center text-muted mt-5">Tidak ada data yang cocok.</p>`;
-            return;
         }
-        sortedList.forEach(item => {
-            const div = document.createElement('div');
-            div.className = 'col-12 col-lg-6';
-            const card = document.createElement('div');
-            card.id = `card-${item.id}`;
-            card.className = `card h-100 shadow-sm ${currentlyEditingId === item.id ? 'border-primary border-2' : ''}`;
-            card.innerHTML = createDisplayCardHTML(item);
-            div.appendChild(card);
-            container.appendChild(div);
-        });
-        $('.select2').select2({ width: '100%' });
-    }
 
-    function filterAndRender() {
-        const showAktif = el('toggle-filter').checked;
-        const searchTerm = el('search-input').value.toLowerCase();
-        el('toggle-filter-label').textContent = showAktif ? 'Aktif' : 'NonAktif';
-        el('toggle-filter-label').className = `fw-bold ms-2 ${showAktif ? 'text-success' : 'text-muted'}`;
-        const filteredList = jobOrderList.filter(item => {
-            const matchesStatus = showAktif ? !isComplete(item) : isComplete(item);
-            if (!matchesStatus) return false;
-            if (searchTerm) {
-                const joMatch = item.NoJobOrder.toLowerCase().includes(searchTerm);
-                const truckMatch = item.NoTruck.toLowerCase().includes(searchTerm);
-                return joMatch || truckMatch;
-            }
-            return true;
-        });
-        renderJobOrderList(filteredList);
-    }
+        function render() {
+            populateAvailableTrucks();
+            const showAktif = DOM.statusToggle.checked, search = DOM.searchInput.value.toLowerCase(), shift = DOM.shiftFilter.value;
 
-    async function updateJobOrder(jobOrderId, updatedData) {
-        const item = jobOrderList.find(jo => jo.id === jobOrderId);
-        if (!item) return;
+            DOM.statusToggleLabel.textContent = showAktif ? 'Aktif' : 'NonAktif';
+            DOM.statusToggleLabel.className = `ms-2 ${showAktif ? 'status-aktif' : 'status-nonaktif'}`;
 
-        const originalItemState = JSON.parse(JSON.stringify(item));
-
-        const optimisticData = JSON.parse(JSON.stringify(updatedData));
-        if (optimisticData.time_list) {
-            optimisticData.time_list = { ...(item.time_list || {}), ...optimisticData.time_list };
-        }
-        Object.assign(item, optimisticData);
-        filterAndRender();
-
-        try {
-            const response = await fetch(`/job-orders/${jobOrderId}`, {
-                method: 'PUT',
-                headers: { 'Content-Type': 'application/json', 'X-CSRF-TOKEN': CSRF_TOKEN, 'Accept': 'application/json' },
-                body: JSON.stringify(updatedData)
+            DOM.jobOrderContainer.innerHTML = '';
+            const filtered = jobOrderList.filter(item => {
+                const s = normalizeStatus(item.status), completed = isComplete(item), cancelled = (s === 'Batal');
+                const matchesKapal = !config.selectedKapal || item.Kapal === config.selectedKapal;
+                const matchesTab = showAktif ? (s === 'Aktif' && !completed && !cancelled) : (s === 'NonAktif' || completed || cancelled);
+                const matchesShift = !shift || item.NoShift == shift;
+                const matchesSearch = !search || (item.NoJobOrder && item.NoJobOrder.toLowerCase().includes(search)) || (item.NoTruck && item.NoTruck.toLowerCase().includes(search));
+                return matchesKapal && matchesTab && matchesShift && matchesSearch;
             });
-            if (!response.ok) {
-                const err = await response.json();
-                const firstError = err.errors ? Object.values(err.errors)[0][0] : (err.message || 'Gagal menyimpan data.');
-                throw new Error(firstError);
-            }
-            const resultData = await response.json();
-            const index = jobOrderList.findIndex(jo => jo.id === jobOrderId);
-            if (index !== -1) { jobOrderList[index] = resultData; }
-            showNotification('Data berhasil diperbarui!', 'success');
-        } catch (error) {
-            Object.assign(item, originalItemState);
-            showNotification(error.message, 'danger');
-        } finally {
-            currentlyEditingId = null;
-            filterAndRender();
-        }
-    }
 
-    window.setTime = (button, jobOrderId, field) => {
-        button.disabled = true;
-        const now = new Date();
-        const time = `${String(now.getHours()).padStart(2,'0')}:${String(now.getMinutes()).padStart(2,'0')}`;
-        const item = jobOrderList.find(jo => jo.id === jobOrderId);
-        const tl = item.time_list || {};
-        const sequence = { open_valve: 'plugging', close_valve: 'open_valve', unplugging: 'close_valve' };
+            const sorted = filtered.sort((a, b) => {
+                const aComplete = isComplete(a), bComplete = isComplete(b);
+                const aCancelled = normalizeStatus(a.status) === 'Batal', bCancelled = normalizeStatus(b.status) === 'Batal';
+                const aIncomplete = !aComplete && !aCancelled, bIncomplete = !bComplete && !bCancelled;
 
-        const prevTime = (field === 'plugging') ? formatTimeHM(item.WaktuTiba) : formatTimeHM(tl[sequence[field]]);
+                if (aIncomplete && !bIncomplete) return -1;
+                if (!aIncomplete && bIncomplete) return 1;
+                if (aComplete && bCancelled) return -1;
+                if (aCancelled && bComplete) return 1;
 
-        if (prevTime && time <= prevTime) {
-            showNotification(`Waktu tidak boleh sama atau lebih kecil dari waktu sebelumnya`, 'warning');
-            button.disabled = false;
-            return;
-        }
-        updateJobOrder(jobOrderId, { time_list: { [field]: time } });
-    };
-
-    window.updateJobOrderDetail = (select, jobOrderId, field) => {
-        updateJobOrder(jobOrderId, { time_list: { [field]: select.value } });
-    };
-    window.editJobOrder = (id) => { currentlyEditingId = id; filterAndRender(); };
-    window.cancelCardEdit = () => { currentlyEditingId = null; filterAndRender(); };
-
-    window.saveCardChanges = async (jobOrderId) => {
-        const card = el(`card-${jobOrderId}`);
-        const item = jobOrderList.find(jo => jo.id === jobOrderId);
-        if (!card || !item) return;
-
-        let updatedData = {
-            NoTruck: card.querySelector(`#NoTruck-${jobOrderId}`).value,
-            time_list: { ...(item.time_list || {}) }
-        };
-
-        card.querySelectorAll('.time-picker').forEach(picker => {
-            const field = picker.dataset.field;
-            const hours = picker.querySelector('.hour-display').textContent;
-            const minutes = picker.querySelector('.minute-display').textContent;
-            const timeValue = (hours !== '--' && minutes !== '--') ? `${hours}:${minutes}` : null;
-
-            if (field === 'WaktuTiba') {
-                updatedData.WaktuTiba = timeValue;
-            } else {
-                updatedData.time_list[field] = timeValue;
-            }
-        });
-
-        updatedData.time_list.NoPalka = card.querySelector(`#NoPalka-${jobOrderId}`).value;
-        updatedData.time_list.NoHose = card.querySelector(`#NoHose-${jobOrderId}`).value;
-
-        await updateJobOrder(jobOrderId, updatedData);
-    };
-
-    const form = el('form-joborder');
-    const arrivalTimeBtn = el('btn-set-arrival-time');
-    const waktuTibaInput = el('WaktuTiba');
-    const noJobOrderInput = el('NoJobOrder');
-    const noTruckSelect = el('NoTruck');
-    const kapalSelectEl = el('Kapal');
-
-    const resetFormInputs = () => {
-        form.reset();
-        waktuTibaInput.classList.remove('filled-bg');
-        noJobOrderInput.classList.remove('filled-bg');
-        noTruckSelect.classList.remove('filled-bg');
-
-        $('#NoTruck').val('').trigger('change');
-
-        if(selectedKapal) {
-            $('#Kapal').val(selectedKapal).trigger('change');
-        } else {
-            kapalSelectEl.classList.remove('filled-bg');
-            $('#Kapal').val('').trigger('change');
-            $('#Kapal').prop('disabled', false);
-        }
-
-        arrivalTimeBtn.textContent = 'Start';
-        arrivalTimeBtn.classList.remove('btn-secondary');
-        arrivalTimeBtn.classList.add('btn-success');
-        arrivalTimeBtn.disabled = false;
-    };
-
-    arrivalTimeBtn.addEventListener('click', function() {
-        const now = new Date();
-        const time = `${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}`;
-        waktuTibaInput.value = time;
-        waktuTibaInput.classList.add('filled-bg');
-        this.textContent = 'Done';
-        this.classList.remove('btn-success');
-        this.classList.add('btn-secondary');
-        this.disabled = true;
-    });
-
-    noJobOrderInput.addEventListener('blur', function() {
-        if (this.value) { this.classList.add('filled-bg'); }
-        else { this.classList.remove('filled-bg'); }
-    });
-
-    $('#NoTruck').on('change', function() {
-        if (this.value) { noTruckSelect.classList.add('filled-bg'); }
-        else { noTruckSelect.classList.remove('filled-bg'); }
-    });
-
-    $('#Kapal').on('change', function() {
-        const newKapal = this.value;
-
-        if (selectedKapal && newKapal && newKapal !== selectedKapal) {
-            const urlParts = window.location.pathname.split('/');
-            const newUrl = `/${urlParts[1]}/${urlParts[2]}/${urlParts[3]}/${newKapal}`;
-            window.location.href = newUrl;
-            return;
-        }
-
-        if (this.value) {
-            if (!selectedKapal) {
-                kapalSelectEl.classList.add('filled-bg');
-                $(this).prop('disabled', true);
-            }
-        } else {
-            kapalSelectEl.classList.remove('filled-bg');
-        }
-    });
-
-    form.addEventListener('submit', async function(e) {
-        e.preventDefault();
-        const submitBtn = el('btn-submit-joborder');
-        const form = e.target;
-        const waktuTibaValue = form.WaktuTiba.value;
-
-        const payload = {
-            NoJobOrder: form.NoJobOrder.value,
-            NoTruck: form.NoTruck.value,
-            Kapal: form.Kapal.value,
-            Tanggal: '{{ $currentDate->toDateString() }}',
-            NoShift: {{ $currentShift }},
-            WaktuTiba: waktuTibaValue
-        };
-
-        if (!payload.WaktuTiba) {
-            return showNotification('Harap atur Waktu Tiba terlebih dahulu!', 'warning');
-        }
-        if (!payload.NoJobOrder || !payload.NoTruck || !payload.Kapal) {
-            return showNotification('Semua field (Kapal, No Job Order, No Truck) tidak boleh kosong!', 'warning');
-        }
-        if (jobOrderList.some(item => item.NoJobOrder === payload.NoJobOrder && !isComplete(item))) {
-            return showNotification(`No Job Order ${payload.NoJobOrder} yang aktif sudah ada.`, 'danger');
-        }
-        const toggleButtonLoading = (isLoading) => {
-            if (isLoading) {
-                submitBtn.disabled = true; submitBtn.dataset.originalHtml = submitBtn.innerHTML;
-                submitBtn.innerHTML = `<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>`;
-            } else {
-                if (submitBtn.dataset.originalHtml) submitBtn.innerHTML = submitBtn.dataset.originalHtml;
-                submitBtn.disabled = false;
-            }
-        };
-        toggleButtonLoading(true);
-        try {
-            const response = await fetch("{{ route('joborders.store') }}", {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json', 'X-CSRF-TOKEN': CSRF_TOKEN, 'Accept': 'application/json' },
-                body: JSON.stringify(payload)
+                const aDate = new Date(a.created_at || a.updated_at), bDate = new Date(b.created_at || b.updated_at);
+                return aIncomplete ? aDate - bDate : bDate - aDate;
             });
-            if (!response.ok) {
-                const err = await response.json();
-                const firstError = err.errors ? Object.values(err.errors)[0][0] : (err.message || 'Gagal menyimpan data.');
-                throw new Error(firstError);
-            }
-            const resultData = await response.json();
-            jobOrderList.push(resultData);
-            showNotification('Data berhasil ditambahkan', 'success');
-            resetFormInputs();
-            filterAndRender();
-        } catch (error) {
-            showNotification(error.message, 'danger');
-        } finally {
-            toggleButtonLoading(false);
-        }
-    });
 
-    el('toggle-filter').onchange = filterAndRender;
-    el('search-input').oninput = filterAndRender;
-    el('btn-scan-qr-input').onclick = () => {
-        qrScannerModal.show();
-        if (!html5QrCode) html5QrCode = new Html5Qrcode("qr-reader");
-        html5QrCode.start({ facingMode: "environment" }, { fps: 10, qrbox: {width: 250, height: 250} },
-            decodedText => {
-                el('NoJobOrder').value = decodedText;
-                el('NoJobOrder').dispatchEvent(new Event('blur'));
-                html5QrCode.stop().then(() => qrScannerModal.hide());
-            }, () => {}
-        ).catch(err => showNotification("Gagal mengakses kamera: " + err, 'danger'));
-    };
-    el('qr-scanner-popup').addEventListener('hidden.bs.modal', () => {
-        if (html5QrCode && html5QrCode.isScanning) { html5QrCode.stop().catch(() => {}); }
+            const totalPages = Math.ceil(sorted.length / itemsPerPage);
+            currentPage = Math.max(1, Math.min(currentPage, totalPages || 1));
+
+            const startIndex = (currentPage - 1) * itemsPerPage;
+            sorted.slice(startIndex, startIndex + itemsPerPage).forEach(item => {
+                const div = document.createElement('div');
+                div.className = 'col-12 col-xl-6';
+                div.innerHTML = `<div id="card-${item.id}" class="card job-card h-100 shadow-sm" style="border-color: #ced4da !important; ${currentlyEditingId === item.id ? 'border-width: 3px !important;' : ''}">${createDisplayCardHTML(item)}</div>`;
+                DOM.jobOrderContainer.appendChild(div);
+            });
+
+            renderPagination(totalPages);
+            $('.select2-basic').select2({ width: '100%', placeholder: 'Pilih' });
+        }
+
+        window.setTime = (btn, id, field) => {
+            const item = jobOrderList.find(jo => jo.id === id);
+            if (!item) return;
+            const tl = item.time_list || {}, seq = { open_valve: 'plugging', close_valve: 'open_valve', unplugging: 'close_valve' };
+            const prevTime = formatTimeHM(field === 'plugging' ? item.WaktuTiba : tl[seq[field]]);
+            const timeToSet = getCurrentTime();
+
+            if (prevTime && (compareTime(timeToSet, prevTime) === 0 || compareTime(timeToSet, addOneMinute(prevTime)) < 0)) {
+                return Swal.fire({ icon: 'error', title: 'Waktu harus minimal 1 menit setelah waktu sebelumnya', timer: 2000 });
+            }
+
+            btn.disabled = true;
+            updateJobOrder(id, { time_list: { [field]: timeToSet } }).then(ok => ok && showNotification('Waktu disimpan'));
+        };
+
+        window.updateJobOrderDetail = (sel, id, f) => updateJobOrder(id, { time_list: { [f]: sel.value } });
+        window.updateBoosterStatus = (rad, id) => updateJobOrder(id, { time_list: { kategori: rad.value } });
+
+        function renderPagination(totalPages) {
+            const container = el('pagination-container');
+            container.innerHTML = '';
+            if (totalPages <= 1) return;
+            const ul = document.createElement('ul');
+            ul.className = 'pagination mb-0 justify-content-center';
+            for (let i = 1; i <= totalPages; i++) {
+                const li = document.createElement('li');
+                li.className = `page-item ${i === currentPage ? 'aktif' : ''}`;
+                li.innerHTML = `<a class="page-link" href="#">${i}</a>`;
+                li.onclick = (e) => { e.preventDefault(); currentPage = i; render(); };
+                ul.appendChild(li);
+            }
+            container.appendChild(ul);
+        }
+
+        window.editJobOrder = id => { currentlyEditingId = id; tempTimeChanges = {}; render(); };
+        window.cancelCardEdit = () => { currentlyEditingId = null; tempTimeChanges = {}; render(); };
+
+        window.adjustTime = (event, type, change, fieldId) => {
+            if (event) event.preventDefault();
+            const picker = document.querySelector(`[data-field="${fieldId}"]`);
+            const hDisp = picker.querySelector('.hour-display'), mDisp = picker.querySelector('.minute-display');
+            let h = parseInt(hDisp.textContent), m = parseInt(mDisp.textContent);
+
+            if (type === 'h') h = (h + change + 24) % 24;
+            else {
+                m += change;
+                if (m < 0) { m = 59; h = (h - 1 + 24) % 24; }
+                else if (m > 59) { m = 0; h = (h + 1) % 24; }
+            }
+            hDisp.textContent = String(h).padStart(2, '0');
+            mDisp.textContent = String(m).padStart(2, '0');
+            tempTimeChanges[fieldId] = `${hDisp.textContent}:${mDisp.textContent}`;
+        };
+
+        const getTimeFromPicker = (fId) => {
+            const p = document.querySelector(`[data-field="${fId}"]`);
+            return p ? `${p.querySelector('.hour-display').textContent}:${p.querySelector('.minute-display').textContent}` : null;
+        };
+
+        window.saveCardChanges = async id => {
+            const c = el(`card-${id}`);
+            const originalItem = jobOrderList.find(jo => jo.id === id);
+            const originalTL = originalItem.time_list || {};
+
+            const getValOrNull = (field, originalVal) => {
+                const val = getTimeFromPicker(`${field}-${id}`);
+                if (val === '00:00') {
+                    if (!originalVal || originalVal === '--:--' || originalVal === '') {
+                        return null;
+                    }
+                }
+                return val;
+            };
+
+            const data = {
+                NoTruck: c.querySelector(`#NoTruck-${id}`).value,
+                WaktuTiba: getValOrNull('WaktuTiba', originalItem.WaktuTiba),
+                time_list: {
+                    NoHose: c.querySelector(`#NoHose-${id}`).value,
+                    NoPalka: c.querySelector(`#NoPalka-${id}`).value,
+                    kategori: c.querySelector(`input[name="k-${id}"]:checked`)?.value,
+                    plugging: getValOrNull('plugging', originalTL.plugging),
+                    open_valve: getValOrNull('open_valve', originalTL.open_valve),
+                    close_valve: getValOrNull('close_valve', originalTL.close_valve),
+                    unplugging: getValOrNull('unplugging', originalTL.unplugging)
+                }
+            };
+
+            if (await updateJobOrder(id, data)) {
+                currentlyEditingId = null;
+                tempTimeChanges = {};
+                render();
+                showNotification('Data diperbarui');
+            }
+        };
+
+        window.cancelJobOrder = id => {
+            Swal.fire({
+                title: 'Apakah anda yakin?', icon: 'warning', input: 'text', inputPlaceholder: 'Catatan...',
+                showCancelButton: true, confirmButtonText: 'Ya', confirmButtonColor: '#b91c1c'
+            }).then(async r => {
+                if (r.isConfirmed) {
+                    const res = await fetch(`/job-order/${id}/batal`, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json', 'X-CSRF-TOKEN': config.csrfToken },
+                        body: JSON.stringify({ Catatan: r.value })
+                    });
+                    if (res.ok) {
+                        const d = await res.json();
+                        jobOrderList[jobOrderList.findIndex(jo => jo.id === id)] = normalizeJobOrder(d.jobOrder || d);
+                        render();
+                        showNotification('Dibatalkan');
+                    }
+                }
+            });
+        };
+
+        window.openNotePopup = id => {
+            const item = jobOrderList.find(jo => jo.id === id);
+            Swal.fire({
+                title: 'Catatan', input: 'text', inputValue: item?.time_list?.Catatan || '',
+                showCancelButton: true, confirmButtonText: 'Simpan'
+            }).then(async r => {
+                if (r.isConfirmed && await updateJobOrder(id, { time_list: { Catatan: r.value } })) showNotification('Disimpan');
+            });
+        };
+
+        function init() {
+            const tick = () => DOM.realtimeClock.textContent = new Date().toLocaleTimeString('id-ID', { hour12: false }).replace(/\./g, ':');
+            tick(); setInterval(tick, 1000);
+
+            $(DOM.kapalSelect).on('change', function () {
+                const val = $(this).val();
+                if (val && val !== config.selectedKapal) {
+                    window.location.href = `{{ route('job-order.input', ['date' => 'DATE', 'shift' => 'SHIFT', 'kapal' => 'KAPAL']) }}`
+                        .replace('DATE', config.currentDate).replace('SHIFT', config.currentShift).replace('KAPAL', encodeURIComponent(val));
+                }
+            });
+
+            DOM.form.addEventListener('submit', async e => {
+                e.preventDefault();
+                const p = { NoJobOrder: el('NoJobOrder').value, NoTruck: el('NoTruck').value, Kapal: el('Kapal').value, Tanggal: config.currentDate, NoShift: el('NoShift').value, WaktuTiba: DOM.waktuTibaInput.value };
+                if (!p.WaktuTiba) return showNotification('Harap klik Start dulu', 'warning');
+                try {
+                    const res = await fetch(config.storeUrl, { method: 'POST', headers: { 'Content-Type': 'application/json', 'X-CSRF-TOKEN': config.csrfToken }, body: JSON.stringify(p) });
+                    const d = await res.json();
+                    if (!res.ok) throw new Error(d.message || 'Gagal simpan');
+                    jobOrderList.push(normalizeJobOrder(d.jobOrder || d));
+                    DOM.form.reset(); DOM.waktuTibaInput.value = ''; DOM.arrivalTimeBtn.disabled = false;
+                    render(); showNotification('Job Order berhasil ditambah');
+                } catch (err) { showNotification(err.message, 'error'); }
+            });
+
+            DOM.arrivalTimeBtn.onclick = function () { DOM.waktuTibaInput.value = getCurrentTime(); this.disabled = true; };
+            DOM.statusToggle.onchange = DOM.searchInput.oninput = DOM.shiftFilter.onchange = () => { currentPage = 1; render(); };
+
+            if (DOM.scanQrBtn) {
+                DOM.scanQrBtn.onclick = () => {
+                    qrScannerModal.show();
+                    if (!html5QrCode) html5QrCode = new Html5Qrcode("qr-reader");
+                    html5QrCode.start({ facingMode: "environment" }, { fps: 10, qrbox: 250 }, t => { DOM.noJobOrderInput.value = t; qrScannerModal.hide(); });
+                };
+            }
+
+            jobOrderList = jobOrderList.map(normalizeJobOrder);
+            render();
+
+            setInterval(async () => {
+                if (currentlyEditingId !== null) return;
+                const res = await fetch('/job-orders', { headers: { 'Accept': 'application/json' } });
+                if (res.ok) {
+                    const data = await res.json();
+                    const all = (Array.isArray(data) ? data : data.jobOrders).map(normalizeJobOrder);
+                    jobOrderList = config.selectedKapal ? all.filter(i => i.Kapal === config.selectedKapal) : all;
+                    render();
+                }
+            }, 10000);
+        }
+        init();
     });
-    const clockEl = el('input-realtime-clock');
-    if (clockEl) {
-        const updateClock = () => { clockEl.textContent = new Date().toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false }).replace(/\./g, ':'); };
-        updateClock(); setInterval(updateClock, 1000);
-    }
-    $('#NoTruck').select2({ width: '100%', placeholder: 'Pilih' });
-    $('#Kapal').select2({ width: '100%', placeholder: 'Pilih' });
-    filterAndRender();
-});
 </script>
 @endpush

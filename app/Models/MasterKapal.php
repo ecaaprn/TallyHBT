@@ -7,5 +7,16 @@ use Illuminate\Database\Eloquent\Model;
 
 class MasterKapal extends Model
 {
-    protected $fillable = ['nama'];
+    use HasFactory;
+
+    protected $fillable = [
+        'nama',
+        'tanggal',
+        'status'
+    ];
+
+    public function trucks()
+    {
+        return $this->hasMany(MasterTruck::class, 'kapal_id');
+    }
 }

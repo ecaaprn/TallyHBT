@@ -16,19 +16,21 @@ yarn-error.log
 /.fleet
 /.idea
 /.vscode
+
 # backup controller
 app/Http/Controllers/*_old.php
 app/Http/Controllers/*_15102025.php
 app/Http/Controllers/*_22102025.php
 
 # sql dump
-db_wflo.sql
 *.sql
+
+# archives
+*.zip
 
 # server specific
 public/.well-known/
+public/test.php
 
-# master data migrations (prod only)
-database/migrations/*_create_master_*_table.php
-
-
+# accidental files
+ystemctl status php8.1-fpm

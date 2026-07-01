@@ -14,9 +14,10 @@ return new class extends Migration
             $table->date('Tanggal');
             $table->integer('NoShift');
             $table->string('Kapal');
-            $table->string('NoJobOrder')->unique();
+            $table->string('NoJobOrder');
             $table->string('NoTruck');
             $table->time('WaktuTiba');
+            $table->string('status')->default('Aktif');
             $table->timestamps();
         });
     }

@@ -10,13 +10,14 @@ class JobOrder extends Model
     use HasFactory;
 
     protected $fillable = [
+        'user_id',
         'Tanggal',
         'NoShift',
         'Kapal',
         'NoJobOrder',
         'NoTruck',
         'WaktuTiba',
-        'user_id',
+        'status',
     ];
 
     public function timeList()

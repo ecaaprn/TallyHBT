@@ -7,5 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class MasterPalka extends Model
 {
+    use HasFactory;
+
     protected $fillable = ['nama'];
 }
